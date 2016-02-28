@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         configViews();
-        getSongs();
     }
 
     @Override
@@ -43,9 +42,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-
         searchView.setOnQueryTextListener(this);
-
 
         return true;
     }
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {
@@ -70,18 +67,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         // RecyclerView
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -92,10 +85,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     // Call Backend Methods
-    private void getSongs() {
+    private void getSongs(String artist) {
         // Test Call from Backend
         RestManager restManager = new RestManager();
-        Call<SongWrapper> listCall = restManager.getiTunesService().getAllSongs();
+        Call<SongWrapper> listCall = restManager.getiTunesService().getAllSongs(artist);
 
         listCall.enqueue(new Callback<SongWrapper>() {
             @Override
@@ -128,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public void onFailure(Call<SongWrapper> call, Throwable t) {
                 Log.e(TAG, "error : " + t.getLocalizedMessage());
+                Snackbar.make(recyclerView, t.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -135,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextSubmit(String query) {
         Log.d(TAG, query);
+
+        getSongs(query);
+
         return false;
     }
 
