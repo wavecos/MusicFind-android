@@ -23,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SongsAdapter.SongClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView recyclerView;
@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         recyclerView.setRecycledViewPool(new RecyclerView.RecycledViewPool());
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new SongsAdapter(this);
+        recyclerView.setAdapter(adapter);
     }
 
     // Call Backend Methods
@@ -99,10 +102,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     for (Song song : body.getResults()) {
                         Log.d(TAG, "salida: " + song.getTrackName());
                     }
-
-                    adapter = new SongsAdapter(body.getResults());
-                    recyclerView.setAdapter(adapter);
-
+                    adapter.addSongs(response.body().getResults());
                 } else {
                     int sc = response.code();
                     switch (sc) {
@@ -139,5 +139,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onQueryTextChange(String newText) {
         Log.d(TAG, newText);
         return false;
+    }
+
+
+    @Override
+    public void onClick(int position) {
+        Log.d(TAG, "item presionado es : " + position);
     }
 }
