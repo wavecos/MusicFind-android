@@ -1,15 +1,16 @@
 package com.xiobit.musicfind.model;
 
+import java.io.Serializable;
+
 /**
  * Created by onix on 2/9/16.
  */
-public class Song {
+public class Song implements Serializable {
 
     String artistName;
     String collectionName;
     String trackName;
     String artworkUrl100;
-
 
     public String getArtistName() {
         return artistName;

@@ -63,6 +63,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public Song getSelectedSong(int position) {
+        return this.songs.get(position);
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView photoImageView;

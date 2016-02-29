@@ -1,7 +1,7 @@
-package com.xiobit.musicfind;
+package com.xiobit.musicfind.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -10,11 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
+import com.xiobit.musicfind.R;
 import com.xiobit.musicfind.adapter.SongsAdapter;
+import com.xiobit.musicfind.helper.Constants;
 import com.xiobit.musicfind.model.Song;
 import com.xiobit.musicfind.model.SongWrapper;
 import com.xiobit.musicfind.service.RestManager;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private static final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView recyclerView;
     private SongsAdapter adapter;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        progressBar = (ProgressBar) findViewById(R.id.pbLoading);
+
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -90,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     // Call Backend Methods
     private void getSongs(String artist) {
         // Test Call from Backend
+
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+
         RestManager restManager = new RestManager();
         Call<SongWrapper> listCall = restManager.getiTunesService().getAllSongs(artist);
 
@@ -116,12 +124,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                             Log.e("Error", "Generic Error");
                     }
                 }
+
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<SongWrapper> call, Throwable t) {
                 Log.e(TAG, "error : " + t.getLocalizedMessage());
                 Snackbar.make(recyclerView, t.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
+                progressBar.setVisibility(ProgressBar.VISIBLE);
             }
         });
     }
@@ -138,9 +149,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return false;
     }
 
-
     @Override
     public void onClick(int position) {
         Log.d(TAG, "item presionado es : " + position);
+        Song selectedSong = adapter.getSelectedSong(position);
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+
+        intent.putExtra(Constants.REFERENCE.SONG, selectedSong);
+        startActivity(intent);
     }
 }
