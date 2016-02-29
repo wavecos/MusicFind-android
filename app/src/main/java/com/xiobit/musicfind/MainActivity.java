@@ -129,15 +129,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextSubmit(String query) {
         Log.d(TAG, query);
-
         getSongs(query);
-
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Log.d(TAG, newText);
         return false;
     }
 
