@@ -1,15 +1,17 @@
 package com.xiobit.musicfind.model;
 
+import java.io.Serializable;
+
 /**
  * Created by onix on 2/9/16.
  */
-public class Song {
+public class Song implements Serializable {
 
     String artistName;
     String collectionName;
     String trackName;
     String artworkUrl100;
-
+    String previewUrl;
 
     public String getArtistName() {
         return artistName;
@@ -43,4 +45,11 @@ public class Song {
         this.artworkUrl100 = artworkUrl100;
     }
 
+    public String getPreviewUrl() {
+        return previewUrl;
+    }
+
+    public void setPreviewUrl(String previewUrl) {
+        this.previewUrl = previewUrl;
+    }
 }

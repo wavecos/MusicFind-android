@@ -13,7 +13,4 @@ public class SongWrapper {
         return results;
     }
 
-    public void setResults(List<Song> results) {
-        this.results = results;
-    }
 }

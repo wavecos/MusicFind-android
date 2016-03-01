@@ -2,6 +2,7 @@ package com.xiobit.musicfind.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.xiobit.musicfind.R;
 import com.xiobit.musicfind.model.Song;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,10 +21,12 @@ import java.util.List;
  */
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
 
+    private final SongClickListener listener;
     private List<Song> songs;
 
-    public SongsAdapter(List<Song> songs) {
-        this.songs = songs;
+    public SongsAdapter(SongClickListener listener) {
+        this.songs = new ArrayList<Song>();
+        this.listener = listener;
     }
 
     @Override
@@ -54,7 +58,17 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         return this.songs.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public void addSongs(List<Song> songs) {
+        this.songs = songs;
+        notifyDataSetChanged();
+    }
+
+    public Song getSelectedSong(int position) {
+        return this.songs.get(position);
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView photoImageView;
         TextView trackNameTextView;
@@ -66,7 +80,17 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
             photoImageView = (ImageView) itemView.findViewById(R.id.photoImageView);
             trackNameTextView = (TextView) itemView.findViewById(R.id.trackNameTextView);
             collectionNameTextView = (TextView) itemView.findViewById(R.id.collectionNameTextView);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            listener.onClick(getLayoutPosition());
+        }
+    }
+
+    public interface SongClickListener {
+        void onClick(int position);
     }
 
 }
