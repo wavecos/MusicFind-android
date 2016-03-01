@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public void onClick(int position) {
-        Log.d(TAG, "item presionado es : " + position);
+        Log.d(TAG, "onClick : " + position);
         Song selectedSong = adapter.getSelectedSong(position);
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
 

@@ -11,6 +11,7 @@ public class Song implements Serializable {
     String collectionName;
     String trackName;
     String artworkUrl100;
+    String previewUrl;
 
     public String getArtistName() {
         return artistName;
@@ -44,4 +45,11 @@ public class Song implements Serializable {
         this.artworkUrl100 = artworkUrl100;
     }
 
+    public String getPreviewUrl() {
+        return previewUrl;
+    }
+
+    public void setPreviewUrl(String previewUrl) {
+        this.previewUrl = previewUrl;
+    }
 }
